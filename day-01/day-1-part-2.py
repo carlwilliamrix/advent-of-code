@@ -16,3 +16,4 @@ right_sorted = sorted(right)
 total_distance = sum(abs(l * right_sorted.count(l)) for l, r in zip(left_sorted, right_sorted))
 
 print(total_distance)
+#18997088
