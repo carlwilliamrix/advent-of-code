@@ -58,7 +58,6 @@ def find_obstruction_positions(grid):
     directions = {"^": (-1, 0), ">": (0, 1), "v": (1, 0), "<": (0, -1)}
     right_turn = {"^": ">", ">": "v", "v": "<", "<": "^"}
 
-    # Find guard's starting position and direction
     guard_start = None
     guard_dir = None
     for r, row in enumerate(grid):
@@ -68,55 +67,45 @@ def find_obstruction_positions(grid):
                 guard_dir = cell
                 break
 
-    # Function to simulate the guard's movement and detect loops
     def simulate(grid, start_pos, start_dir):
         visited_states = set()
         guard_pos = start_pos
         guard_dir = start_dir
 
         while True:
-            # Record the current state
             state = (guard_pos, guard_dir)
             if state in visited_states:
-                return True  # Loop detected
+                return True
             visited_states.add(state)
 
-            # Calculate the next position
             dr, dc = directions[guard_dir]
             next_pos = (guard_pos[0] + dr, guard_pos[1] + dc)
 
-            # Check if the next position is within bounds
             if not (0 <= next_pos[0] < len(grid) and 0 <= next_pos[1] < len(grid[0])):
-                return False  # Guard leaves the grid
+                return False
 
             # Check for an obstacle
             if grid[next_pos[0]][next_pos[1]] == "#":
-                guard_dir = right_turn[guard_dir]  # Turn right
+                guard_dir = right_turn[guard_dir]
             else:
-                guard_pos = next_pos  # Move forward
+                guard_pos = next_pos
 
-    # Find all valid obstruction positions
     valid_positions = set()
     for r in range(len(grid)):
         for c in range(len(grid[0])):
-            # Skip the guard's starting position
             if (r, c) == guard_start:
                 continue
 
-            # Temporarily add an obstruction
             original_cell = grid[r][c]
             grid[r][c] = "#"
 
-            # Simulate guard's movement with the obstruction
             if simulate(grid, guard_start, guard_dir):
                 valid_positions.add((r, c))
 
-            # Restore the original cell
             grid[r][c] = original_cell
 
     return len(valid_positions), valid_positions
 
-# Run the function
 count, positions = find_obstruction_positions([list(row) for row in data])
 print("Number of valid positions:", count)
 print("Valid positions:", positions)
