@@ -35,5 +35,5 @@ def solve(equations, part_two):
 print(f"Solve part one {solve(data, False)}")
 #28730327770375
 
-print(f"Solve part one {solve(data, True)}")
-#28730327770375
+print(f"Solve part two {solve(data, True)}")
+#424977609625985
